@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "runtime",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd runtime && npx tsx src/cli.ts serve --port 4174"],
+      "port": 4174
+    }
+  ]
+}

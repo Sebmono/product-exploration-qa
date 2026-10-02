@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent QA PoC — Mission Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="live.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 28 28" aria-hidden="true">
+      <path d="M4 24 L10 14 L16 18 L24 4" fill="none" stroke="var(--flag)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="4" cy="24" r="2.6" fill="var(--paper)"/>
+      <circle cx="24" cy="4" r="2.6" fill="var(--flag)"/>
+    </svg>
+    <span class="brand-name">AGENT QA PoC</span>
+    <span class="brand-sub">mission control · live</span>
+  </div>
+  <div class="target-chips">
+    <span class="chip chip-status" id="run-status"><span class="dot"></span><span id="run-status-text">idle</span></span>
+  </div>
+</header>
+
+<section class="mission-bar mission-bar-live">
+  <div class="mission-fields">
+    <input id="mission-input" class="mission-input" type="text" placeholder="Mission — what should Agent QA PoC figure out?">
+    <input id="target-input" class="mission-input mission-input-small" type="text" placeholder="Target URL (https://…)">
+    <input id="repo-input" class="mission-input mission-input-small" type="text" placeholder="Source repo path (optional)">
+  </div>
+  <div class="mission-actions">
+    <select id="pub-select" class="pub-select" title="When a publication is chosen, Agent QA PoC compiles the finished exploration into a work order and hands it off through the configured sink (a local JSON file by default, or a webhook). Don't ask the agent to submit anything in the mission text.">
+      <option value="">Explore only — no handoff</option>
+    </select>
+    <label class="demo-toggle"><input type="checkbox" id="demo-check" checked> demo (replay golden fixture)</label>
+    <button id="start-btn" class="start-btn">Start exploration</button>
+    <button id="resume-btn" class="start-btn resume-btn" hidden>I'm logged in — hand off</button>
+    <button id="abort-btn" class="ctl-btn abort-btn" hidden>Abort</button>
+  </div>
+</section>
+
+<main class="panes">
+  <aside class="pane pane-trace">
+    <div class="pane-head">
+      <h2>Traverse</h2>
+      <span class="pane-hint" id="trace-phase">awaiting mission</span>
+    </div>
+    <div class="trace-scroll" id="trace-list">
+      <div class="trace-empty" id="trace-empty">
+        <p>Plan and live trace will appear here.</p>
+        <p class="trace-empty-sub">Agent QA PoC reads the target's source before it touches the UI.</p>
+      </div>
+    </div>
+  </aside>
+
+  <section class="pane pane-walk">
+    <div class="pane-head">
+      <h2>Field view</h2>
+      <span class="pane-hint" id="walk-caption">—</span>
+    </div>
+    <div class="viewport-frame">
+      <div class="viewport-chrome">
+        <span class="vc-dot"></span><span class="vc-dot"></span><span class="vc-dot"></span>
+        <span class="vc-url" id="vc-url">—</span>
+      </div>
+      <div class="viewport-body" id="viewport-body">
+        <div class="vp-idle" id="vp-idle">
+          <svg viewBox="0 0 28 28" aria-hidden="true" class="vp-idle-mark">
+            <path d="M4 24 L10 14 L16 18 L24 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p>Field view connects when the walk begins.</p>
+        </div>
+        <img id="shot" class="field-shot" hidden alt="Latest exploration screenshot">
+        <pre id="a11y-view" class="a11y-view" hidden></pre>
+      </div>
+    </div>
+  </section>
+
+  <aside class="pane pane-artifact">
+    <div class="pane-head">
+      <h2>Work order</h2>
+      <span class="pane-hint">for the docs writer</span>
+    </div>
+    <div class="paper" id="paper">
+      <div class="paper-empty" id="paper-empty">
+        <p>Nothing to hand off yet.</p>
+        <p class="paper-empty-sub">As behaviors are proven, evidence accumulates here.</p>
+      </div>
+      <div class="paper-doc" id="paper-doc" hidden>
+        <div class="paper-head">
+          <span class="paper-stamp" id="paper-stamp">IN PROGRESS</span>
+          <h3 id="paper-title">Exploration evidence</h3>
+          <p class="paper-meta" id="paper-meta"></p>
+        </div>
+        <div class="paper-body" id="paper-body"></div>
+      </div>
+    </div>
+    <div class="order-footer" id="order-actions" hidden>
+      <button class="paper-btn" id="handoff-btn">Submit work order</button>
+      <button class="paper-btn paper-btn-resume" id="continue-btn" hidden>Resume exploration</button>
+      <p class="order-msg" id="order-msg" aria-live="polite"></p>
+    </div>
+  </aside>
+</main>
+
+<footer class="statusline">
+  <div class="runs-strip" id="runs-strip"></div>
+  <span id="status-msg">Agent QA PoC runtime — live runs need ANTHROPIC_API_KEY in runtime/.env; demo mode replays the recorded 2026-07-10 exploration.</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

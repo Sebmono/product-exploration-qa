@@ -1,0 +1,28 @@
+{
+  "name": "agent-qa-poc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent QA PoC agent runtime: exploration engine, trace store, surface drivers, pluggable work-order handoff",
+  "type": "module",
+  "bin": {
+    "agent-qa": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "cli": "tsx src/cli.ts",
+    "fixture": "tsx src/cli.ts fixture"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
+    "playwright": "^1.61.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
